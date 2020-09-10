@@ -1,0 +1,66 @@
+from sklearn import linear_model
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df1 = pd.read_excel('C:/Users/admin/Desktop/机器学习精品课/相关材料/线性回归/程序和数据/data.xlsx')
+X = np.array(df1[['Xdata']])
+Y = np.array(df1[['Ydata']])
+
+plt.xlabel('X-data')
+plt.ylabel('Y-data')
+plt.scatter(X,Y,60,color='blue',marker='o')
+plt.title('Linear Regression')
+
+clf = linear_model.LinearRegression()
+clf.fit(X,Y)
+print(clf.coef_,clf.intercept_)
+print(clf.score(X,Y))
+plt.plot(X,clf.predict(X),color='red',linewidth=4)
+plt.show()
+-----------------------------------------------------------------------------------------------------------------------------
+带检验的一元线性回归
+
+pip install pandas
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pandas import DataFrame, Series
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+datafile = 'C:\\Users\\admin\\Desktop\\机器学习精品课\\相关材料\\线性回归\\程序和数据\\data.xlsx'
+data = pd.read_excel(datafile)
+examDf = DataFrame(data)
+
+X_train, X_test, Y_train, Y_test = train_test_split(examDf.Xdata, examDf.Ydata, train_size=0.8)
+print("X source data:",examDf.Xdata.shape, ';train set:', X_train.shape, ',test set:', X_test.shape)
+print("Y source data:",examDf.Ydata.shape, ';train set:', X_train.shape, ',test set:', Y_test.shape)
+
+X_train=X_train.values.reshape(-1,1)
+X_test=X_test.values.reshape(-1,1)
+model1 = LinearRegression()
+model1.fit(X_train,Y_train)
+model2 = LinearRegression()
+model2.fit(X_test, Y_test)
+
+a1 = model1.intercept_
+b1 = model1.coef_
+
+a2 = model2.intercept_
+b2 = model2.coef_
+
+#print('coefficient:',b1, 'intepret:', a1)
+print('the fitting function for train set is: Y=',round(a1,2),'+',round(b1[0],2),'*X')
+print('the fitting function for test set is: Y=',round(a2,2),'+',round(b2[0],2),'*X')
+
+plt.plot(X_train, model1.predict(X_train), color='blue', linewidth=2, label='best fitting line for training data')
+plt.plot(X_test, model2.predict(X_test), color='yellow', linewidth=2, label='best fitting line for test data')
+
+plt.scatter(X_train, Y_train, color='darkgreen', label = 'train set')
+plt.scatter(X_test,Y_test, color='red', label='test set')
+plt.legend(loc=2)
+plt.xlabel('Xdata')
+plt.ylabel('Ydata')
+plt.show()
+
